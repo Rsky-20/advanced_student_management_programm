@@ -1,7 +1,8 @@
 {
   "etudiant_": [
-    {"nom": "AAA", "prenom": "ZZZ", "ddn": "01/01/2000", "Note1": 12.000000, "Note2": 13.000000, "Note3": 14.000000, "moyenne": 13.000000},
-    {"nom": "EEE", "prenom": "RRR", "ddn": "01/01/2001", "Note1": 12.000000, "Note2": 15.000000, "Note3": 14.000000, "moyenne": 13.666667},
-    {"nom": "TTT", "prenom": "YYY", "ddn": "01/01/2001", "Note1": 12.000000, "Note2": 14.000000, "Note3": 15.000000, "moyenne": 13.666667}
+    {"#nom": "JEAN", "prenom": "DENIS", "ddn": "12/04/2001", "note1": 18.000000, "note2": 14.000000, "note3": 8.000000, "moyenne": 13.333333},
+    {"#nom": "GO", "prenom": "MI", "ddn": "21/12/2001", "note1": 2.000000, "note2": 2.000000, "note3": 2.000000, "moyenne": 2.000000},
+    {"#nom": "GUIGUI", "prenom": "EVE", "ddn": "10/11/1967", "note1": 11.000000, "note2": 18.000000, "note3": 4.000000, "moyenne": 11.000000},
+    {"#nom": "vvv", "prenom": "ppp", "ddn": "30/03/2000", "note1": 12.000000, "note2": 13.400000, "note3": 17.870001, "moyenne": 14.423333}
   ]
 }
