@@ -7,18 +7,18 @@ Exercice :EXERXICE 4
 Version : v3_max
 Date : 25/01/2023 | seance 3 (cours-TP)
 Description :
-	Programme de saisie des notes d'un etudiant et affichage de cet etudiant
+	Programme de gestion d'etudiant.
+	Creation d'une fiche etudiante / Suppression d'une fiche etudiante / Affichage d'une fiche etudiante
+	Recherche d'un(e) ou plusieurs etudiant(e)(s) / Sauvegarde via un fichier json / Chargement via un fichier json
 */
 
 //------------------------------------
 //             En-tete
 //------------------------------------
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include"lib/ex3_lib.h"
-//#include"lib/json_lib.h"
 
 //------------------------------------
 //        Programme Principal
@@ -36,13 +36,15 @@ int main()
     do{
         system("cls");
         affiche_menu();
-        user_cmd = saisir_int(CMDTEXT1, CMDTEXT2, CMDTEXT3, 0, 7);
+        user_cmd = saisir_int(CMDTEXT1, CMDTEXT2, CMDTEXT3, 0, 8);
 
         switch (user_cmd)
         {
             case 0:
-                printf("Merci d'avoir utilise le programme etudiant !!!");
-                printf("\n######## END ########\n");
+                system("cls");
+                afficher_titre();
+                printf("\n\n\t\t\t\t   Merci d'avoir utilise le programme etudiant !!!");
+                printf("\n\t\t\t\t\t      ######## END ########\n");
                 return 0;
             case 1:
                 system("cls");
@@ -73,9 +75,8 @@ int main()
                 break;
             case 4:
                 system("cls");
-                printf("\n######## Suppression Etudiant ######## [dev in progree]\n");
+                printf("\n######## Suppression Etudiant ########\n");
 
-                int id;
                 if(N == 0)
                 {
                     printf("\nIl n'y a aucun etudiant a supprimer");
@@ -83,52 +84,53 @@ int main()
                 }
                 else
                 {
-                    printf("\n------------ /!\ IMPORTANT /!\ -------------");
-                    printf("\n- Saisissez l'id de l'etudiant a supprimer -");
-                    printf("\n--------------------------------------------");
-                    afficher_n_etudiant(e, N);
-                    printf("\n--------------------------------------------");
-
-                    id = saisir_int(IDTEXT1, IDTEXT2, IDTEXT3, 0, N);
-                    supprimer_etudiant(id, e, N);
+                    supprimer_etudiant(e, N);
                     N--;
+                    printf("\nL'etudiant(e) a ete supprime avec succes !!!");
                     system("pause");
                 }
                 break;
             case 5:
                 system("cls");
-                printf("\n######## Sauvegarder Etudiants ########\n");
-                int s = sauvegarder_etudiants(e, N);
-                if(s)
+                printf("\n######## Modification Etudiant ########\n");
+
+                if(N == 0)
                 {
-                    printf("\nLa liste d'etudiant a ete sauvegarde avec succes !!!");
+                    printf("\nIl n'y a aucun etudiant a modifier");
+                    system("pause");
                 }
                 else
-                    printf("\n /!\ ERREUR etudiants.json /!\ \nUne erreur s'est produite lors de la sauvegarde du fichier .json ! \n Veuillez verifier que le fichier est au bon format et qu'il comporte des donnees valident.");
-
-                system("pause");
+                {
+                    modifier_etudiant(e, N);
+                    printf("\nL'etudiant(e) a ete modifie avec succes !!!");
+                    system("pause");
+                }
                 break;
             case 6:
                 system("cls");
-                printf("\n######## Charger Etudiants ######## [dev in progree]\n");
-                e = charger_etudiants(JSONDATA, N);
-                if(e)
-                {
-                    printf("\nLa liste d'etudiant a ete chargee avec succes !!!");
-                }
-                else
-                    printf("\n /!\ ERREUR etudiants.json /!\ \nUne erreur s'est produite lors du chargement du fichier .json ! \n Veuillez verifier que le fichier est au bon format et qu'il comporte des donnees valident.");
-
+                printf("\n######## Sauvegarder Etudiants ########\n");
+                int s = sauvegarder_etudiants(e, N);
+                printf("\nLa liste d'etudiant a ete sauvegarde avec succes !!!");
                 system("pause");
                 break;
             case 7:
                 system("cls");
+                printf("\n######## Charger Etudiants ######## [dev in progree]\n");
+                int nbEtudiants;
+                nbEtudiants = 0;
+                e = charger_etudiants(JSONDATA, &nbEtudiants);
+                N = nbEtudiants;
+                printf("\nLa liste d'etudiant a ete chargee avec succes !!!");
+                system("pause");
+                break;
+            case 8:
+                system("cls");
                 printf("\n######## AIDE | Help ########\n");
-                description();
+                aide();
                 system("pause");
                 break;
             default:
-                printf("Choix invalide.\n");
+                printf("\nERREUR !!! Choix invalide.\n");
                 break;
         }
     }while(user_cmd != 0);
