@@ -1,0 +1,22 @@
+	3. Rechercher Etudiant :
+
+		Cette fonctionnalite permet a l'utilisateur de rechercher un 
+		etudiant dans la liste du programme.
+		Afin de rechercer l'etudiant, il faut saisir au choix : 
+			- l'annee de naissance
+			- le nom
+			- le prenom
+	
+		/!\ A savoir /!\ 
+		Si plusieurs etudiant ont : 
+			- la meme annee de naissance
+			- le meme nom
+			- le meme prenom
+		Ils seront afficher les un apres les autres. 
+		
+		La recherche necessite de connaitre au moins l'une des informations
+		demandees. Sans quoi il n'est pas possible de rechercher un etudiant.
+
+		Une fonctionnalite interressante serait de rechercher des etudiants 
+		selon la moyenne. Cependant, elle n'est pas disponible a ce jours.
+		

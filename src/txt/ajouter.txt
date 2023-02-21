@@ -1,0 +1,18 @@
+	1. Ajouter une fiche etudiant :
+
+		Cette fonctionnalite permet a l'utilisateur d'ajouter un 
+		etudiant dans la liste du programme.
+		Dans un premier temps, on demande la saisie du nombre 
+		d'etudiant qu'on souhaite inscrire dans le programme. 
+		Si on tape 0, on ressort de la fonctionnalité sans 
+		rajouter d'etudiant. Sinon, X etudiant seront a saisir.
+		
+		L'id de l'etudiant s'affiche et le programme demande les
+		informations de l'etudiant : 
+			- nom
+			- prenom
+			- la date de naissance dans le format jj/mm/aaaa. 
+				Il faut d'abord rentrer l'annee, le mois puis
+				le jour pour verifier si le mois de fevrier 
+				prend 28 ou 29 jours au maximum
+			- la note 1 a 3

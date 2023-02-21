@@ -1,0 +1,10 @@
+	2. Afficher Liste Etudiant : 
+		
+		Cette fonctionnalite permet a l'utilisateur d'afficher
+		la liste des etudiants disponible dans le programme.
+		Aucune action de l'utilisateur n'est attendue pour 
+		cette fonctionnalite. 
+		Lors de l'affichage des fiches etudiants, toutes les
+		informations sont presentees. 
+		Chaque etudiant a un id correspondant a sont emplacement 
+		relative dans la liste du programme.

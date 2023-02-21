@@ -3,9 +3,9 @@ Nom : VAUDRY
 Prenom : Pierre
 Classse : AERO 3PSA-1
 Groupe : A1
-Exercice :EXERXICE 4
+Exercice :EXERXICE 3
 Version : v3_max
-Date : 25/01/2023 | seance 3 (cours-TP)
+Date : 25/02/2023 | seance 3 (cours-TP)
 Description :
 	Biblio pour le programme de saisie des notes d'un etudiant et affichage de cet etudiant
 */
@@ -38,6 +38,7 @@ Description :
 #define JOURTEXT3 "\nLe jour est entre 1 et 30 (sauf février |28 ou 29 (bissextile))."
 
 #define JSONDATA "etudiants.json"
+#define TAILLE_MAX 1000
 
 //------------------------------------
 //           Structure
@@ -540,7 +541,7 @@ void affiche_menu()
     printf("*                                                 *\n");
     printf("* > Ajouter une fiche etudiant | cmd : 1          *\n");
     printf("* > Afficher Liste Etudiants   | cmd : 2          *\n");
-    printf("* > Afficher la fiche etudiant | cmd : 3          *\n");
+    printf("* > Rechercher Etudiant        | cmd : 3          *\n");
     printf("* > Supprimer la fiche etudiant| cmd : 4          *\n");
     printf("* > Modifier la fiche etudiant | cmd : 5          *\n");
     printf("* > Sauvegarder la liste       | cmd : 6          *\n");
@@ -571,18 +572,123 @@ void description()
  * @param sep Le caractere separateur.
  * @param nb Le nombre de caractere pour la separation.
  */
+
+
+void affichage_fichier(char filename[20])
+{
+    FILE* fichier = NULL;
+    char chaine[TAILLE_MAX] = "";
+
+    fichier = fopen(filename, "r");
+
+    if (fichier != NULL)
+    {
+        while (fgets(chaine, TAILLE_MAX, fichier) != NULL) // On lit le fichier tant qu'on ne reçoit pas d'erreur (NULL)
+        {
+            printf("%s", chaine); // On affiche la chaîne qu'on vient de lire
+        }
+        fclose(fichier);
+    }
+}
+//------------------------------------
+/**
+ * @brief Affichage de l'aide pour les fonctionnalites du programme.
+ */
 void aide()
 {
-    printf("\n*#################################################*\n");
-    printf("#                                                 #\n");
-    printf("#           ####    #   ####    #####   #         #\n");
-    printf("#          #    #   #   #   #   #       #         #\n");
-    printf("#          ######   #   #   #   #####   #         #\n");
-    printf("#          #    #   #   #   #   #                 #\n");
-    printf("#          #    #   #   ####    #####   #         #\n");
-    printf("#                                                 #\n");
-    printf("*#################################################*\n");
-    printf("\nComment fonctionne le programme ?");
+
+    int user_cmd;
+
+
+    do{
+        system("cls");
+        printf("\n*#################################################*\n");
+        printf("#                                                 #\n");
+        printf("#           ####    #   ####    #####   #         #\n");
+        printf("#          #    #   #   #   #   #       #         #\n");
+        printf("#          ######   #   #   #   #####   #         #\n");
+        printf("#          #    #   #   #   #   #                 #\n");
+        printf("#          #    #   #   ####    #####   #         #\n");
+        printf("#                                                 #\n");
+        printf("*#################################################*\n");
+        printf("\n\t~ Comment fonctionne le programme ?");
+        printf("\n\tLe programme est compose de sous ensemble disponible dans le menu. ");
+        printf("\nLe menu permet de naviguer a travers les differentes fonctionnalite. \n");
+        printf("\nA chaque etape, on s'assure que la saisie de l'utilisateur est valide (notament");
+        printf("\npour les entiers ou les flottants). Le temps que la saisie n'est pas conforme");
+        printf("\n(exemple : si le mois n'est pas compris entre 1 et 12), les informations seront");
+        printf("\ndemandees avec un message indiquand l'erreur possible.");
+        printf("\nCette verification permet d'eviter les boucle infini lors de la saisie d'une");
+        printf("\nchaine de caractere dans un emplacement reserve a un entier ou un flottant.\n");
+        affiche_menu();
+        user_cmd = saisir_int(CMDTEXT1, CMDTEXT2, CMDTEXT3, 0, 8);
+
+        switch (user_cmd)
+        {
+            case 0:
+                printf("\n######## Aide Quitter le programme ########\n");
+                printf("\nPermet de quitter le programme. Ainsi que l'aide au programme.\n");
+                return 0;
+            case 1:
+                system("cls");
+                printf("\n######## Aide Ajout Etudiant ########\n\n");
+                affichage_fichier("txt/ajouter.txt");
+                printf("\n");
+                system("pause");
+                break;
+            case 2:
+                system("cls");
+                printf("\n######## Aide Afficher Liste Etudiant ########\n\n");
+                affichage_fichier("txt/afficher_liste.txt");
+                printf("\n");
+                system("pause");
+                break;
+            case 3:
+                system("cls");
+                printf("\n######## Aide Recherche Etudiant ########\n\n");
+                affichage_fichier("txt/rechercher.txt");
+                printf("\n");
+                system("pause");
+                break;
+            case 4:
+                system("cls");
+                printf("\n######## Aide Suppression Etudiant ########\n\n");
+                affichage_fichier("txt/supprimer.txt");
+                printf("\n");
+                system("pause");
+                break;
+            case 5:
+                system("cls");
+                printf("\n######## Aide Modification Etudiant ########\n\n");
+                affichage_fichier("txt/modifier.txt");
+                printf("\n");
+                system("pause");
+                break;
+            case 6:
+                system("cls");
+                printf("\n######## Aide Sauvegarder Etudiants ########\n\n");
+                affichage_fichier("txt/sauvegarder.txt");
+                printf("\n");
+                system("pause");
+                break;
+            case 7:
+                system("cls");
+                printf("\n######## Aide Charger Etudiants ########\n");
+                affichage_fichier("txt/charger.txt");
+                printf("\n");
+                system("pause");
+                break;
+            case 8:
+                system("cls");
+                printf("\n######## AIDE | Help ########\n");
+                printf("\nLa fonctionnalite ou vous vous trouver pour savoir comment utiliser le programme.\n");
+                system("pause");
+                break;
+            default:
+                printf("\nERREUR !!! Choix invalide.\n");
+                break;
+        }
+    }while(user_cmd != 0);
 
 }
 
