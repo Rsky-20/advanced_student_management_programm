@@ -35,7 +35,7 @@ Description :
 
 #define JOURTEXT1 "\nJour : "
 #define JOURTEXT2 "\nLa saisie du jour comporte une erreur..."
-#define JOURTEXT3 "\nLe jour est entre 1 et 30 (sauf février |28 ou 29 (bissextile))."
+#define JOURTEXT3 "\nLe jour est entre 1 et 30 (sauf fï¿½vrier |28 ou 29 (bissextile))."
 
 #define JSONDATA "etudiants.json"
 #define TAILLE_MAX 1000
@@ -70,14 +70,14 @@ int saisir_int(char text1[100], char text2[100], char text3[100],int min_nb, int
     int n = 0;
     do{
         printf("%s", text1);
-        if ((scanf("%d", &n)) != 1) // vérifie si la saisie est invalide
+        if ((scanf("%d", &n)) != 1) // vï¿½rifie si la saisie est invalide
         {
             printf(text2);
             printf(text3);
-            fflush(stdin); // vide le tampon d'entrée
+            fflush(stdin); // vide le tampon d'entrï¿½e
             n = -1; // affecte -1 pour que la boucle continue
         }
-        else if (n < min_nb || n > max_nb) // vérifie si le nombre est hors limites
+        else if (n < min_nb || n > max_nb) // vï¿½rifie si le nombre est hors limites
         {
             printf(text2);
             printf(text3);
@@ -92,11 +92,17 @@ int saisir_int(char text1[100], char text2[100], char text3[100],int min_nb, int
 date saisir_date()
 {
     date d;
-    int bissextile = 0;
+    int bissextile = 0, annee;
+    time_t t;
+    // Renvoie l'heure actuelle
+    time(&t);
+
+    struct tm *local = localtime(&t);
+    annee = local->tm_year + 1900;
 
     printf("\nSaisir la date de naissance au format : jj/mm/aaaa");
     printf("\nEntrez l'annee de naissance : ");
-    d.annee = saisir_int(ANNEETEXT1, ANNEETEXT2, ANNEETEXT3, 1950, 2100);
+    d.annee = saisir_int(ANNEETEXT1, ANNEETEXT2, ANNEETEXT3, 1950, annee);
 
     if ((d.annee % 4 == 0 && d.annee % 100 != 0) || d.annee % 400 == 0)
     {
@@ -109,10 +115,10 @@ date saisir_date()
     printf("\nEntrez le mois de naissance : ");
     d.mois = saisir_int(MOISTEXT1, MOISTEXT2, MOISTEXT3, 1, 12);
 
-    // Vérifier si le mois de février doit avoir 29 jours
+    // Verifier si le mois de fevrier doit avoir 29 jours
     if(d.mois == 2)
     {
-        // Vérifier si l'année est bissextile
+        // Verifier si l'annee est bissextile
         if(bissextile)
         {
             printf("\nLe mois de fevrier a 29 jours.");
@@ -128,8 +134,16 @@ date saisir_date()
     }
     else
     {
-        printf("\nEntrez le jour de naissance (1-30) : ");
-        d.jour = saisir_int(JOURTEXT1, JOURTEXT2, JOURTEXT3, 1, 30);
+        if(d.mois == 1 || d.mois == 3 || d.mois == 5 || d.mois == 7 || d.mois == 8 || d.mois == 10 || d.mois == 12)
+        {
+            printf("\nEntrez le jour de naissance (1-31) : ");
+            d.jour = saisir_int(JOURTEXT1, JOURTEXT2, JOURTEXT3, 1, 31);
+        }
+        if(d.mois == 4 || d.mois == 6 || d.mois == 8 || d.mois == 11)
+        {
+            printf("\nEntrez le jour de naissance (1-30) : ");
+            d.jour = saisir_int(JOURTEXT1, JOURTEXT2, JOURTEXT3, 1, 30);
+        }
     }
     return d;
 }
@@ -217,8 +231,8 @@ void  saisir_n_etudiant(Etudiant *e, int ini ,int fin)
 /**
  * @brief Affiche les informations de tous les etudiants sous forme de liste.
  *
- * @param e Tableau d'étudiants contenant les informations a afficher.
- * @param i Position de l'etudiants à afficher.
+ * @param e Tableau d'ï¿½tudiants contenant les informations a afficher.
+ * @param i Position de l'etudiants ï¿½ afficher.
  */
 void afficher_1_etudiant(Etudiant e, int i )
 {
@@ -237,9 +251,9 @@ void afficher_1_etudiant(Etudiant e, int i )
 }
 //------------------------------------
 /**
- * @brief Affiche les informations de tous les étudiants sous forme de liste.
+ * @brief Affiche les informations de tous les ï¿½tudiants sous forme de liste.
  *
- * @param e Tableau d'étudiants contenant les informations a afficher.
+ * @param e Tableau d'ï¿½tudiants contenant les informations a afficher.
  * @param nb_etudiants Le nombre d'etudiants a afficher.
  */
 void  afficher_n_etudiant(Etudiant *e, int nb_etudiants)
@@ -340,10 +354,10 @@ void modifier_etudiant(Etudiant *e, int *nb_etudiant)
  */
 int sauvegarder_etudiants(Etudiant* e, int n)
 {
-    // Définissez une chaîne de caractères qui contiendra les données JSON
+    // Dï¿½finissez une chaï¿½ne de caractï¿½res qui contiendra les donnï¿½es JSON
     char jsonString[1000] = "";
 
-    // Ajoutez la chaîne d'ouverture d'objet JSON "{"
+    // Ajoutez la chaï¿½ne d'ouverture d'objet JSON "{"
     strcat(jsonString, "{\n");
 
     // Ajoutez le champ "personnes" avec sa valeur, qui sera un tableau d'objets JSON
@@ -353,7 +367,7 @@ int sauvegarder_etudiants(Etudiant* e, int n)
         // Ajoutez l'indentation pour le nouvel objet JSON
         strcat(jsonString, "    ");
 
-        // Ajoutez la chaîne d'ouverture d'objet JSON "{"
+        // Ajoutez la chaï¿½ne d'ouverture d'objet JSON "{"
         strcat(jsonString, "{");
 
         // Ajoutez le champ "nom" avec sa valeur en utilisant la fonction sprintf
@@ -361,7 +375,7 @@ int sauvegarder_etudiants(Etudiant* e, int n)
         sprintf(nomField, "\"#nom\": \"%s\"", (e+i)->nom);
         strcat(jsonString, nomField);
 
-        // Ajoutez une virgule pour séparer les champs dans l'objet JSON
+        // Ajoutez une virgule pour sï¿½parer les champs dans l'objet JSON
         strcat(jsonString, ", ");
 
         // Ajoutez le champ "prenom" avec sa valeur en utilisant la fonction sprintf
@@ -369,7 +383,7 @@ int sauvegarder_etudiants(Etudiant* e, int n)
         sprintf(prenomField, "\"prenom\": \"%s\"", (e+i)->prenom);
         strcat(jsonString, prenomField);
 
-        // Ajoutez une virgule pour séparer les champs dans l'objet JSON
+        // Ajoutez une virgule pour sï¿½parer les champs dans l'objet JSON
         strcat(jsonString, ", ");
 
         // Ajoutez le champ "ddn" avec sa valeur en utilisant la fonction sprintf
@@ -377,7 +391,7 @@ int sauvegarder_etudiants(Etudiant* e, int n)
         sprintf(ddnField, "\"ddn\": \"%02d/%02d/%d\"", (e+i)->ddn.jour, (e+i)->ddn.mois, (e+i)->ddn.annee);
         strcat(jsonString, ddnField);
 
-        // Ajoutez une virgule pour séparer les champs dans l'objet JSON
+        // Ajoutez une virgule pour sï¿½parer les champs dans l'objet JSON
         strcat(jsonString, ", ");
 
         // Ajoutez le champ "note1" avec sa valeur en utilisant la fonction sprintf
@@ -385,7 +399,7 @@ int sauvegarder_etudiants(Etudiant* e, int n)
         sprintf(note1Field, "\"note1\": %f", (e+i)->note1);
         strcat(jsonString, note1Field);
 
-        // Ajoutez une virgule pour séparer les champs dans l'objet JSON
+        // Ajoutez une virgule pour sï¿½parer les champs dans l'objet JSON
         strcat(jsonString, ", ");
 
         // Ajoutez le champ "note2" avec sa valeur en utilisant la fonction sprintf
@@ -393,7 +407,7 @@ int sauvegarder_etudiants(Etudiant* e, int n)
         sprintf(note2Field, "\"note2\": %f", (e+i)->note2);
         strcat(jsonString, note2Field);
 
-        // Ajoutez une virgule pour séparer les champs dans l'objet JSON
+        // Ajoutez une virgule pour sï¿½parer les champs dans l'objet JSON
         strcat(jsonString, ", ");
 
         // Ajoutez le champ "note3" avec sa valeur en utilisant la fonction sprintf
@@ -401,7 +415,7 @@ int sauvegarder_etudiants(Etudiant* e, int n)
         sprintf(note3Field, "\"note3\": %f", (e+i)->note3);
         strcat(jsonString, note3Field);
 
-        // Ajoutez une virgule pour séparer les champs dans l'objet JSON
+        // Ajoutez une virgule pour sï¿½parer les champs dans l'objet JSON
         strcat(jsonString, ", ");
 
         // Ajoutez le champ "moyenne" avec sa valeur en utilisant la fonction sprintf
@@ -409,10 +423,10 @@ int sauvegarder_etudiants(Etudiant* e, int n)
         sprintf(moyenneField, "\"moyenne\": %f", (e+i)->moyenne);
         strcat(jsonString, moyenneField);
 
-        // Ajoutez la chaîne de fermeture d'objet JSON "}"
+        // Ajoutez la chaï¿½ne de fermeture d'objet JSON "}"
         strcat(jsonString, "}");
 
-        // Ajoutez une virgule pour séparer les objets dans le tableau JSON
+        // Ajoutez une virgule pour sï¿½parer les objets dans le tableau JSON
         if (i < n - 1)
         {
             strcat(jsonString, ",\n");
@@ -420,13 +434,13 @@ int sauvegarder_etudiants(Etudiant* e, int n)
     }
     strcat(jsonString, "\n  ]\n");
 
-    // Ajoutez la chaîne de fermeture d'objet JSON "}"
+    // Ajoutez la chaï¿½ne de fermeture d'objet JSON "}"
     strcat(jsonString, "}\n");
 
-    // Ouvrez un fichier en écriture
+    // Ouvrez un fichier en ï¿½criture
     FILE *fichier = fopen(JSONDATA, "w");
 
-    // Écrivez les données JSON dans le fichier en utilisant la fonction fprintf
+    // ï¿½crivez les donnï¿½es JSON dans le fichier en utilisant la fonction fprintf
     fprintf(fichier, "%s", jsonString);
 
     // Fermez le fichier
@@ -435,11 +449,11 @@ int sauvegarder_etudiants(Etudiant* e, int n)
 }
 //------------------------------------
 /**
- * @brief Charge les informations de tous les étudiants à partir d'un fichier JSON.
+ * @brief Charge les informations de tous les ï¿½tudiants ï¿½ partir d'un fichier JSON.
  *
  * @param filename Le nom du fichier JSON.
- * @param nbEtudiants Le nombre d'étudiants à charger (récupéré depuis le fichier JSON).
- * @return Un tableau d'étudiants contenant les informations chargées depuis le fichier JSON.
+ * @param nbEtudiants Le nombre d'ï¿½tudiants ï¿½ charger (rï¿½cupï¿½rï¿½ depuis le fichier JSON).
+ * @return Un tableau d'ï¿½tudiants contenant les informations chargï¿½es depuis le fichier JSON.
  */
 Etudiant* charger_etudiants(char* filename, int* nbEtudiants)
 {
@@ -451,7 +465,7 @@ Etudiant* charger_etudiants(char* filename, int* nbEtudiants)
         return NULL;
     }
 
-    // Compter le nombre d'étudiants dans le fichier
+    // Compter le nombre d'ï¿½tudiants dans le fichier
     int n = 0;
     char c;
     while ((c = fgetc(fichier)) != EOF)
@@ -463,22 +477,22 @@ Etudiant* charger_etudiants(char* filename, int* nbEtudiants)
     }
     *nbEtudiants = n;
 
-    // Allouer de la mémoire pour le tableau d'étudiants
+    // Allouer de la mï¿½moire pour le tableau d'ï¿½tudiants
     Etudiant* etudArray = (Etudiant*)malloc(sizeof(Etudiant)*(n));
 
-    // Revenir au début du fichier
+    // Revenir au dï¿½but du fichier
     fseek(fichier, 0, SEEK_SET);
 
-    // Lire les données et remplir le tableau d'étudiants
+    // Lire les donnï¿½es et remplir le tableau d'ï¿½tudiants
     int i = 0;
     while ((c = fgetc(fichier)) != '{' && c != EOF) {}
     while (i < n)
     {
-        // Ignorer les caractères de ponctuation
+        // Ignorer les caractï¿½res de ponctuation
         char c;
         while ((c = fgetc(fichier)) != '{' && c != EOF) {}
 
-        // Lire les champs de l'étudiant
+        // Lire les champs de l'ï¿½tudiant
         char nom[20], prenom[20], ddn[11];
         float note1, note2, note3, moyenne;
 
@@ -490,7 +504,7 @@ Etudiant* charger_etudiants(char* filename, int* nbEtudiants)
         fscanf(fichier, "\"note3\": %f, ", &note3);
         fscanf(fichier, "\"moyenne\": %f", &moyenne);
 
-        // Stocker les champs dans le tableau d'étudiants
+        // Stocker les champs dans le tableau d'ï¿½tudiants
         Etudiant e;
         e.ddn = extraire_date(ddn);
         strcpy(e.nom, nom);
@@ -503,7 +517,7 @@ Etudiant* charger_etudiants(char* filename, int* nbEtudiants)
         i++;
     }
 
-    // Fermer le fichier et renvoyer le tableau d'étudiants
+    // Fermer le fichier et renvoyer le tableau d'ï¿½tudiants
     fclose(fichier);
     return etudArray;
 }
@@ -583,9 +597,9 @@ void affichage_fichier(char filename[20])
 
     if (fichier != NULL)
     {
-        while (fgets(chaine, TAILLE_MAX, fichier) != NULL) // On lit le fichier tant qu'on ne reçoit pas d'erreur (NULL)
+        while (fgets(chaine, TAILLE_MAX, fichier) != NULL) // On lit le fichier tant qu'on ne reï¿½oit pas d'erreur (NULL)
         {
-            printf("%s", chaine); // On affiche la chaîne qu'on vient de lire
+            printf("%s", chaine); // On affiche la chaï¿½ne qu'on vient de lire
         }
         fclose(fichier);
     }
@@ -689,6 +703,4 @@ void aide()
                 break;
         }
     }while(user_cmd != 0);
-
 }
-
