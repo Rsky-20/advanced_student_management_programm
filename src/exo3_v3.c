@@ -37,7 +37,7 @@ int main()
     do{
         system("cls");
         affiche_menu();
-        user_cmd = saisir_int(CMDTEXT1, CMDTEXT2, CMDTEXT3, 0, 8);
+        user_cmd = saisir_int(CMDTEXT1, CMDTEXT2, CMDTEXT3, 0, 9);
 
         switch (user_cmd)
         {
@@ -76,22 +76,35 @@ int main()
                 break;
             case 4:
                 system("cls");
-                printf("\n######## Suppression Etudiant ########\n");
+                printf("\n######## Suppression Etudiant par ID ########\n");
 
                 if(N == 0)
                 {
-                    printf("\nIl n'y a aucun etudiant a supprimer");
+                    printf("\nIl n'y a aucun etudiant a supprimer.");
                     system("pause");
                 }
                 else
                 {
-                    supprimer_etudiant(e, N);
-                    N--;
-                    printf("\nL'etudiant(e) a ete supprime avec succes !!!");
+                    supprimer_etudiant_id(e, &N);
                     system("pause");
                 }
                 break;
             case 5:
+                system("cls");
+                printf("\n######## Suppression Etudiant par recherche ########\n");
+
+                if(N == 0)
+                {
+                    printf("\nIl n'y a aucun etudiant a supprimer.");
+                    system("pause");
+                }
+                else
+                {
+                    supprimer_etudiant_info(e, &N);
+                    system("pause");
+                }
+                break;
+            case 6:
                 system("cls");
                 printf("\n######## Modification Etudiant ########\n");
 
@@ -107,14 +120,14 @@ int main()
                     system("pause");
                 }
                 break;
-            case 6:
+            case 7:
                 system("cls");
                 printf("\n######## Sauvegarder Etudiants ########\n");
                 int s = sauvegarder_etudiants(e, N);
                 printf("\nLa liste d'etudiant a ete sauvegarde avec succes !!!");
                 system("pause");
                 break;
-            case 7:
+            case 8:
                 system("cls");
                 printf("\n######## Charger Etudiants ######## [dev in progree]\n");
                 int nbEtudiants;
@@ -124,7 +137,7 @@ int main()
                 printf("\nLa liste d'etudiant a ete chargee avec succes !!!");
                 system("pause");
                 break;
-            case 8:
+            case 9:
                 system("cls");
                 printf("\n######## AIDE | Help ########\n");
                 aide();
@@ -136,4 +149,5 @@ int main()
         }
     }while(user_cmd != 0);
     free(e);
+    return 0;
 }

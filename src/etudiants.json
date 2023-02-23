@@ -5,7 +5,7 @@
     {"#nom": "GUIGUI", "prenom": "Eve", "ddn": "10/11/1967", "note1": 11.000000, "note2": 18.000000, "note3": 4.000000, "moyenne": 11.000000},
     {"#nom": "DIDIER", "prenom": "Louis", "ddn": "30/03/2000", "note1": 12.000000, "note2": 13.400000, "note3": 17.870001, "moyenne": 14.423333},
     {"#nom": "DUPONT", "prenom": "Richard", "ddn": "30/03/2000", "note1": 12.000000, "note2": 13.400000, "note3": 17.870001, "moyenne": 14.423333},
-    {"#nom": "Richou", "prenom": "Michel", "ddn": "30/03/2000", "note1": 12.000000, "note2": 13.400000, "note3": 17.870001, "moyenne": 14.423333},
+    {"#nom": "RICHOU", "prenom": "Michel", "ddn": "30/03/2000", "note1": 12.000000, "note2": 13.400000, "note3": 17.870001, "moyenne": 14.423333},
     {"#nom": "BERNARD", "prenom": "Laurent", "ddn": "30/03/2000", "note1": 12.000000, "note2": 13.400000, "note3": 17.870001, "moyenne": 14.423333}
   ]
 }

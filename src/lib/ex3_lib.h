@@ -13,7 +13,7 @@ Description :
 //------------------------------------
 //           Define
 //------------------------------------
-#define CMDTEXT1 "\nCommand /> "
+#define CMDTEXT1 "\n Command /> "
 #define CMDTEXT2 "\nLa saisie de la commande comporte une erreur..."
 #define CMDTEXT3 "\nUn entier entre 0 et 8 est demande."
 
@@ -84,6 +84,7 @@ int saisir_int(char text1[100], char text2[100], char text3[100],int min_nb, int
             n = -1; // affecte -1 pour que la boucle continue
         }
     }while (n < min_nb);
+    return n;
 }
 //------------------------------------
 /**
@@ -272,10 +273,11 @@ void  afficher_n_etudiant(Etudiant *e, int nb_etudiants)
  */
 void rechercher_etudiants(Etudiant *e, int nb_etudiants)
 {
-    printf("Entrez le nom, prenom ou annee de naissance : ");
-    char recherche[20];
-    scanf("%s", recherche);
     int nb_trouves = 0;
+    char recherche[20];
+    printf("Entrez le nom, prenom ou annee de naissance : ");
+    scanf("%s", recherche);
+
     for (int i = 0; i < nb_etudiants; i++)
     {
         if (strcmp(recherche, e[i].nom) == 0 || strcmp(recherche, e[i].prenom) == 0 || atoi(recherche) == e[i].ddn.annee)
@@ -287,24 +289,31 @@ void rechercher_etudiants(Etudiant *e, int nb_etudiants)
     if (nb_trouves == 0)
     {
         printf("Aucun etudiant trouve.\n");
+        return 0;
+
+    }
+    else
+    {
+        printf("\nL'etudiant(e) a ete trouve avec succes !!!");
+        return 1;
     }
 }
 //------------------------------------
 /**
- * @brief Supprimer la fiche d'un etudiant specifique.
+ * @brief Supprimer la fiche d'un etudiant specifique avec son id.
  *
  * @param e Tableau d'etudiants contenant les informations a rechercher.
  * @param nb_etudiants Le nombre d'etudiants.
  */
-void supprimer_etudiant(Etudiant *e, int *nb_etudiant)
+void supprimer_etudiant_id(Etudiant *e, int *nb_etudiant)
 {
-    int i, id, j = nb_etudiant;
+    int i, id, j = *nb_etudiant;
     printf("\n------------ /!\ IMPORTANT /!\ -------------");
     printf("\n- Saisissez l'id de l'etudiant a supprimer -");
     printf("\n--------------------------------------------");
-    afficher_n_etudiant(e, nb_etudiant);
+    afficher_n_etudiant(e, *nb_etudiant);
     printf("\n--------------------------------------------");
-    id = saisir_int(IDTEXT1, IDTEXT2, IDTEXT3, 1, nb_etudiant);
+    id = saisir_int(IDTEXT1, IDTEXT2, IDTEXT3, 1, *nb_etudiant);
 
     for(i = id -1; i < j - 1; i++)
     {
@@ -312,10 +321,52 @@ void supprimer_etudiant(Etudiant *e, int *nb_etudiant)
         {
             *(e+i) = *(e+i+1);
         }
-        else
-            break;
     }
-    nb_etudiant--;
+    (*nb_etudiant)--;
+    printf("\nL'etudiant(e) a ete supprime avec succes !!!");
+
+}
+//------------------------------------
+/**
+ * @brief Supprimer la fiche d'un etudiant specifique a l'aide de ses informations personnelles (nom ET prenom).
+ *
+ * @param e Tableau d'etudiants contenant les informations a rechercher.
+ * @param nb_etudiants Le nombre d'etudiants.
+ */
+void supprimer_etudiant_info(Etudiant *e, int *nb_etudiant)
+{
+    char recherche_nom[20], recherche_prenom[20];
+    int nb_trouves = 0, i, j = *nb_etudiant;
+    printf("\nEntrez le nom : ");
+    scanf("%s", recherche_nom);
+    printf("\nEntrez le prenom : ");
+    scanf("%s", recherche_prenom);
+
+    for (i = 0; i < *nb_etudiant; i++)
+    {
+        if (strcmp(recherche_nom, e[i].nom) == 0 && strcmp(recherche_prenom, e[i].prenom) == 0)
+        {
+            for(i; i < j - 1; i++)
+            {
+                if(i == 0 || i < j - 1 )
+                {
+                    *(e+i) = *(e+i+1);
+                }
+            }
+            (*nb_etudiant)--;
+            nb_trouves++;
+        }
+    }
+    if (nb_trouves == 0)
+    {
+        printf("Aucun etudiant trouve.\n");
+        return 0;
+    }
+    else
+    {
+        printf("\nL'etudiant(e) a ete supprime avec succes !!!");
+        return 1;
+    }
 }
 //------------------------------------
 /**
@@ -399,7 +450,7 @@ int sauvegarder_etudiants(Etudiant* e, int n)
         sprintf(note1Field, "\"note1\": %f", (e+i)->note1);
         strcat(jsonString, note1Field);
 
-        // Ajoutez une virgule pour s�parer les champs dans l'objet JSON
+        // Ajoutez une virgule pour separer les champs dans l'objet JSON
         strcat(jsonString, ", ");
 
         // Ajoutez le champ "note2" avec sa valeur en utilisant la fonction sprintf
@@ -407,7 +458,7 @@ int sauvegarder_etudiants(Etudiant* e, int n)
         sprintf(note2Field, "\"note2\": %f", (e+i)->note2);
         strcat(jsonString, note2Field);
 
-        // Ajoutez une virgule pour s�parer les champs dans l'objet JSON
+        // Ajoutez une virgule pour separer les champs dans l'objet JSON
         strcat(jsonString, ", ");
 
         // Ajoutez le champ "note3" avec sa valeur en utilisant la fonction sprintf
@@ -434,13 +485,13 @@ int sauvegarder_etudiants(Etudiant* e, int n)
     }
     strcat(jsonString, "\n  ]\n");
 
-    // Ajoutez la cha�ne de fermeture d'objet JSON "}"
+    // Ajoutez la chaine de fermeture d'objet JSON "}"
     strcat(jsonString, "}\n");
 
     // Ouvrez un fichier en �criture
     FILE *fichier = fopen(JSONDATA, "w");
 
-    // �crivez les donn�es JSON dans le fichier en utilisant la fonction fprintf
+    // �crivez les donnees JSON dans le fichier en utilisant la fonction fprintf
     fprintf(fichier, "%s", jsonString);
 
     // Fermez le fichier
@@ -449,11 +500,11 @@ int sauvegarder_etudiants(Etudiant* e, int n)
 }
 //------------------------------------
 /**
- * @brief Charge les informations de tous les �tudiants � partir d'un fichier JSON.
+ * @brief Charge les informations de tous les etudiants a partir d'un fichier JSON.
  *
  * @param filename Le nom du fichier JSON.
- * @param nbEtudiants Le nombre d'�tudiants � charger (r�cup�r� depuis le fichier JSON).
- * @return Un tableau d'�tudiants contenant les informations charg�es depuis le fichier JSON.
+ * @param nbEtudiants Le nombre d'etudiants � charger (recupere depuis le fichier JSON).
+ * @return Un tableau d'etudiants contenant les informations chargees depuis le fichier JSON.
  */
 Etudiant* charger_etudiants(char* filename, int* nbEtudiants)
 {
@@ -461,11 +512,11 @@ Etudiant* charger_etudiants(char* filename, int* nbEtudiants)
     FILE* fichier = fopen(filename, "r");
     if (fichier == NULL)
     {
-        printf("Erreur : impossible d'ouvrir le fichier %s\n", filename);
+        printf("\nErreur : impossible d'ouvrir le fichier %s\n", filename);
         return NULL;
     }
 
-    // Compter le nombre d'�tudiants dans le fichier
+    // Compter le nombre d'etudiants dans le fichier
     int n = 0;
     char c;
     while ((c = fgetc(fichier)) != EOF)
@@ -477,10 +528,10 @@ Etudiant* charger_etudiants(char* filename, int* nbEtudiants)
     }
     *nbEtudiants = n;
 
-    // Allouer de la m�moire pour le tableau d'�tudiants
+    // Allouer de la memoire pour le tableau d'etudiants
     Etudiant* etudArray = (Etudiant*)malloc(sizeof(Etudiant)*(n));
 
-    // Revenir au d�but du fichier
+    // Revenir au debut du fichier
     fseek(fichier, 0, SEEK_SET);
 
     // Lire les donn�es et remplir le tableau d'�tudiants
@@ -517,7 +568,7 @@ Etudiant* charger_etudiants(char* filename, int* nbEtudiants)
         i++;
     }
 
-    // Fermer le fichier et renvoyer le tableau d'�tudiants
+    // Fermer le fichier et renvoyer le tableau d'etudiants
     fclose(fichier);
     return etudArray;
 }
@@ -543,27 +594,28 @@ void afficher_titre()
  */
 void affiche_menu()
 {
-    printf("\n*#################################################*\n");
-    printf("#                                                 #\n");
-    printf("#   M       M    E E E    N       N    U     U    #\n");
-    printf("#   M M   M M    E        N N     N    U     U    #\n");
-    printf("#   M   M   M    E E E    N   N   N    U     U    #\n");
-    printf("#   M       M    E        N     N N    U     U    #\n");
-    printf("#   M       M    E E E    N       N     U U U     #\n");
-    printf("#                                                 #\n");
-    printf("*#################################################*\n");
-    printf("*                                                 *\n");
-    printf("* > Ajouter une fiche etudiant | cmd : 1          *\n");
-    printf("* > Afficher Liste Etudiants   | cmd : 2          *\n");
-    printf("* > Rechercher Etudiant        | cmd : 3          *\n");
-    printf("* > Supprimer la fiche etudiant| cmd : 4          *\n");
-    printf("* > Modifier la fiche etudiant | cmd : 5          *\n");
-    printf("* > Sauvegarder la liste       | cmd : 6          *\n");
-    printf("* > Charger sur le programme   | cmd : 7          *\n");
-    printf("* > Aide sur le programme      | cmd : 8          *\n");
-    printf("* > Quiter le programme        | cmd : 0          *\n");
-    printf("*                                                 *\n");
-    printf("*#################################################*\n");
+    printf("\n\t*#################################################*\n");
+    printf("\t#                                                 #\n");
+    printf("\t#   M       M    E E E    N       N    U     U    #\n");
+    printf("\t#   M M   M M    E        N N     N    U     U    #\n");
+    printf("\t#   M   M   M    E E E    N   N   N    U     U    #\n");
+    printf("\t#   M       M    E        N     N N    U     U    #\n");
+    printf("\t#   M       M    E E E    N       N     U U U     #\n");
+    printf("\t#                                                 #\n");
+    printf("\t*#################################################*\n");
+    printf("\t*                                                 *\n");
+    printf("\t* > Ajouter une fiche etudiant | cmd : 1          *\n");
+    printf("\t* > Afficher Liste Etudiants   | cmd : 2          *\n");
+    printf("\t* > Rechercher Etudiant        | cmd : 3          *\n");
+    printf("\t* > Supprimer par ID           | cmd : 4          *\n");
+    printf("\t* > Supprimer par recherche    | cmd : 5          *\n");
+    printf("\t* > Modifier la fiche etudiant | cmd : 6          *\n");
+    printf("\t* > Sauvegarder la liste       | cmd : 7          *\n");
+    printf("\t* > Charger sur le programme   | cmd : 8          *\n");
+    printf("\t* > Aide sur le programme      | cmd : 9          *\n");
+    printf("\t* > Quiter le programme        | cmd : 0          *\n");
+    printf("\t*                                                 *\n");
+    printf("\t*#################################################*\n");
 }
 //------------------------------------
 /**
@@ -581,13 +633,10 @@ void description()
 }
 //------------------------------------
 /**
- * @brief Affichage d'un separateur customisable.
+ * @brief Affichage du contenu d'un fichier txt.
  *
- * @param sep Le caractere separateur.
- * @param nb Le nombre de caractere pour la separation.
+ * @param filename Le nom et chemin du fichier (par defaut dans le repertoire de l'executable).
  */
-
-
 void affichage_fichier(char filename[20])
 {
     FILE* fichier = NULL;
@@ -610,97 +659,26 @@ void affichage_fichier(char filename[20])
  */
 void aide()
 {
+    system("cls");
+    printf("\n\t*#################################################*\n");
+    printf("\t#                                                 #\n");
+    printf("\t#           ####    #   ####    #####   #         #\n");
+    printf("\t#          #    #   #   #   #   #       #         #\n");
+    printf("\t#          ######   #   #   #   #####   #         #\n");
+    printf("\t#          #    #   #   #   #   #                 #\n");
+    printf("\t#          #    #   #   ####    #####   #         #\n");
+    printf("\t#                                                 #\n");
+    printf("\t*#################################################*\n");
+    printf("\n\t~ Comment fonctionne le programme ?");
+    printf("\n\tLe programme est compose de sous ensemble disponible dans le menu. ");
+    printf("\n Le menu permet de naviguer a travers les differentes fonctionnalite. \n");
+    printf("\n A chaque etape, on s'assure que la saisie de l'utilisateur est valide (notament");
+    printf("\n pour les entiers ou les flottants). Le temps que la saisie n'est pas conforme");
+    printf("\n (exemple : si le mois n'est pas compris entre 1 et 12), les informations seront");
+    printf("\n demandees avec un message indiquand l'erreur possible.");
+    printf("\n Cette verification permet d'eviter les boucle infini lors de la saisie d'une");
+    printf("\n chaine de caractere dans un emplacement reserve a un entier ou un flottant.\n");
 
-    int user_cmd;
-
-
-    do{
-        system("cls");
-        printf("\n*#################################################*\n");
-        printf("#                                                 #\n");
-        printf("#           ####    #   ####    #####   #         #\n");
-        printf("#          #    #   #   #   #   #       #         #\n");
-        printf("#          ######   #   #   #   #####   #         #\n");
-        printf("#          #    #   #   #   #   #                 #\n");
-        printf("#          #    #   #   ####    #####   #         #\n");
-        printf("#                                                 #\n");
-        printf("*#################################################*\n");
-        printf("\n\t~ Comment fonctionne le programme ?");
-        printf("\n\tLe programme est compose de sous ensemble disponible dans le menu. ");
-        printf("\nLe menu permet de naviguer a travers les differentes fonctionnalite. \n");
-        printf("\nA chaque etape, on s'assure que la saisie de l'utilisateur est valide (notament");
-        printf("\npour les entiers ou les flottants). Le temps que la saisie n'est pas conforme");
-        printf("\n(exemple : si le mois n'est pas compris entre 1 et 12), les informations seront");
-        printf("\ndemandees avec un message indiquand l'erreur possible.");
-        printf("\nCette verification permet d'eviter les boucle infini lors de la saisie d'une");
-        printf("\nchaine de caractere dans un emplacement reserve a un entier ou un flottant.\n");
-        affiche_menu();
-        user_cmd = saisir_int(CMDTEXT1, CMDTEXT2, CMDTEXT3, 0, 8);
-
-        switch (user_cmd)
-        {
-            case 0:
-                printf("\n######## Aide Quitter le programme ########\n");
-                printf("\nPermet de quitter le programme. Ainsi que l'aide au programme.\n");
-                return 0;
-            case 1:
-                system("cls");
-                printf("\n######## Aide Ajout Etudiant ########\n\n");
-                affichage_fichier("txt/ajouter.txt");
-                printf("\n");
-                system("pause");
-                break;
-            case 2:
-                system("cls");
-                printf("\n######## Aide Afficher Liste Etudiant ########\n\n");
-                affichage_fichier("txt/afficher_liste.txt");
-                printf("\n");
-                system("pause");
-                break;
-            case 3:
-                system("cls");
-                printf("\n######## Aide Recherche Etudiant ########\n\n");
-                affichage_fichier("txt/rechercher.txt");
-                printf("\n");
-                system("pause");
-                break;
-            case 4:
-                system("cls");
-                printf("\n######## Aide Suppression Etudiant ########\n\n");
-                affichage_fichier("txt/supprimer.txt");
-                printf("\n");
-                system("pause");
-                break;
-            case 5:
-                system("cls");
-                printf("\n######## Aide Modification Etudiant ########\n\n");
-                affichage_fichier("txt/modifier.txt");
-                printf("\n");
-                system("pause");
-                break;
-            case 6:
-                system("cls");
-                printf("\n######## Aide Sauvegarder Etudiants ########\n\n");
-                affichage_fichier("txt/sauvegarder.txt");
-                printf("\n");
-                system("pause");
-                break;
-            case 7:
-                system("cls");
-                printf("\n######## Aide Charger Etudiants ########\n");
-                affichage_fichier("txt/charger.txt");
-                printf("\n");
-                system("pause");
-                break;
-            case 8:
-                system("cls");
-                printf("\n######## AIDE | Help ########\n");
-                printf("\nLa fonctionnalite ou vous vous trouver pour savoir comment utiliser le programme.\n");
-                system("pause");
-                break;
-            default:
-                printf("\nERREUR !!! Choix invalide.\n");
-                break;
-        }
-    }while(user_cmd != 0);
+    affichage_fichier("doc/ReadMe.md");
 }
+
